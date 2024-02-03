@@ -12,9 +12,11 @@ function make2DArray(cols, rows) {
 let grid;
 let w = 10;
 let cols, rows;
+let hueValue = 200;
 
 function setup() {
   createCanvas(600, 650);
+  colorMode(HSB, 360, 255, 255);
   cols = width / w;
   rows = height / w;
   grid = make2DArray(cols, rows);
@@ -38,10 +40,14 @@ function mouseDragged() {
         let col = mouseCol + i;
         let row = mouseRow + j;
         if (col >= 0 && col <= cols - 1 && row >= 0 && row <= rows - 1) {
-          grid[col][row] = 1;
+          grid[col][row] = hueValue;
         }
       }
     }
+  }
+  hueValue += 0.5;
+  if (hueValue > 360) {
+    hueValue = 1;
   }
 }
 
@@ -50,9 +56,9 @@ function draw() {
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      noStroke;
-      if (grid[i][j] == 1) {
-        fill(255);
+      noStroke();
+      if (grid[i][j] > 1) {
+        fill(grid[i][j], 255, 255);
         let x = i * w;
         let y = j * w;
         square(x, y, w);
@@ -64,7 +70,7 @@ function draw() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       let state = grid[i][j];
-      if (state === 1) {
+      if (state > 0) {
         let below = grid[i][j + 1];
 
         let dir = 1;
@@ -82,13 +88,13 @@ function draw() {
         }
 
         if (below === 0) {
-          nextGrid[i][j + 1] = 1;
+          nextGrid[i][j + 1] = state;
         } else if (belowA === 0) {
-          nextGrid[i + dir][j + 1] = 1;
+          nextGrid[i + dir][j + 1] = state;
         } else if (belowB === 0) {
-          nextGrid[i + dir][j + 1] = 1;
+          nextGrid[i + dir][j + 1] = state;
         } else {
-          nextGrid[i][j] = 1;
+          nextGrid[i][j] = state;
         }
       }
     }
