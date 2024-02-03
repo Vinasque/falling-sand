@@ -27,9 +27,22 @@ function setup() {
 }
 
 function mouseDragged() {
-  let col = floor(mouseX / w);
-  let row = floor(mouseY / w);
-  grid[col][row] = 1;
+  let mouseCol = floor(mouseX / w);
+  let mouseRow = floor(mouseY / w);
+
+  let matrix = 3;
+  let extent = floor(matrix / 2);
+  for (let i = -extent; i <= extent; i++) {
+    for (let j = -extent; j <= extent; j++) {
+      if (random(1) < 0.75) {
+        let col = mouseCol + i;
+        let row = mouseRow + j;
+        if (col >= 0 && col <= cols - 1 && row >= 0 && row <= rows - 1) {
+          grid[col][row] = 1;
+        }
+      }
+    }
+  }
 }
 
 function draw() {
