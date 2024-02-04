@@ -10,9 +10,17 @@ function make2DArray(cols, rows) {
 }
 
 let grid;
-let w = 10;
+let w = 5;
 let cols, rows;
 let hueValue = 200;
+
+function withinCols(i) {
+  return i >= 0 && i <= cols - 1;
+}
+
+function withinRows(j) {
+  return j >= 0 && j <= rows - 1;
+}
 
 function setup() {
   createCanvas(600, 650);
@@ -39,7 +47,7 @@ function mouseDragged() {
       if (random(1) < 0.75) {
         let col = mouseCol + i;
         let row = mouseRow + j;
-        if (col >= 0 && col <= cols - 1 && row >= 0 && row <= rows - 1) {
+        if (withinCols(col) && withinRows(row)) {
           grid[col][row] = hueValue;
         }
       }
@@ -78,12 +86,13 @@ function draw() {
           dir *= -1;
         }
 
-        let belowA, belowB;
+        let belowA = -1;
+        let belowB = -1;
         
-        if (i + dir >= 0 && i + dir <= cols - 1) {
+        if (withinCols(i + dir)) {
           belowA = grid[i + dir][j + 1];
         }
-        if (i - dir >= 0 && i - dir <= cols - 1) {
+        if (withinCols(i - dir)) {
           belowB = grid[i - dir][j + 1];
         }
 
